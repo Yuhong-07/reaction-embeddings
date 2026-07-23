@@ -56,29 +56,33 @@ Masking direction changed all 18,072 embeddings by more than `1e-6`; the median 
 
 ## 2. Model inputs
 
-### Main encoder inputs
+This section describes the values actually consumed by the current full-corpus code path: `ReactionCorpus`, `ReactionEncoder`, and `configs/model/phase2_structure_only.yaml`.
 
-- Reactant molecular graphs
-- Product molecular graphs
-- Participant side
-- Signed stoichiometric coefficients
-- Evidence-derived reaction direction
-- Optional cofactor role with a separate missing-value mask
+### Inputs consumed by the current encoder
 
-Atom and bond features preserve molecular topology, stereochemistry, and isotope/attachment labels so generic structures such as `[1*]` and `[2*]` remain distinguishable.
+- **Participant molecular graphs.** Each participant's `canonical_smiles` is parsed with RDKit and converted to a graph; the SMILES text itself is not tokenized by the model.
+- **Atom features.** Atomic number, formal charge, degree, aromaticity, hybridization, chirality, total hydrogen count, and isotope information.
+- **Directed-bond features.** Bond type, conjugation, ring membership, and bond stereochemistry.
+- **Participant side.** A learned two-class embedding distinguishes reactants from products.
+- **Stoichiometry.** `log1p(abs(coefficient))` and a stoichiometry-missing indicator enter each participant token. The signed raw coefficient is also used in the molecular delta branch, while each side pool receives `log1p` of its total absolute stoichiometry.
+- **Per-side aggregate features.** Reactants and products are pooled separately using an attention-weighted token pool, a participant-count-normalized token sum, `log1p(participant_count)`, and `log1p(total_absolute_stoichiometry)`.
+- **Evidence-derived direction.** `supported_directions` is reduced to `left_to_right`, `right_to_left`, `reversible`, or `undefined`. The encoder consumes a learned direction embedding and an undefined-direction indicator. Right-to-left reactions are encoded after swapping sides and coefficient signs; reversible reactions average the original and swapped encodings.
+- **Cofactor-role branch.** The active configuration has `use_cofactor: true`, so the encoder consumes a cofactor-role embedding and a cofactor-missing indicator for every participant. The current corpus has no populated cofactor-role annotations; consequently, this branch receives the unknown index and `cofactor_missing=1` for all participants and contributes no observed role categories.
 
-### Excluded inputs
+The fusion layer receives the reactant-side representation, product-side representation, `products - reactants`, the signed stoichiometric molecular delta, the direction embedding, and the direction-missing indicator. It outputs the 256-dimensional reaction embedding.
 
-- EC number
+### Values not consumed by the main embedding encoder
+
+- EC numbers; `ReactionEncoder` raises an error if `use_ec` or `ec_as_input` is enabled
+- Reaction ID or canonical reaction ID
+- Raw reaction SMILES or atom-mapped reaction SMILES
 - Reaction type
-- Participant role metadata
+- Participant `role` metadata
 - Compartment
-- Atom mapping
-- Organism, tissue, condition, flux, or other biological context
+- Atom mapping and bond-change features
+- Organism, tissue, condition, pathway, network topology, flux, bounds, or other biological context
 
-The code raises an error if `use_ec` or `ec_as_input` is enabled. The full input audit showed a maximum embedding difference of exactly 0 after EC removal and exactly 0 after changing the other excluded metadata.
-
-The corpus currently contains no populated cofactor-role annotations, so the full model uses the cofactor missing mask rather than observed cofactor categories. Atom mapping, compartment, and biological context coverage are also zero.
+EC values may be loaded by the dataset for auxiliary prediction or evaluation, but the selected full-corpus training configuration sets `ec_auxiliary: 0.0`; therefore, EC is neither an encoder input nor an active training target. The input audit measured exactly zero embedding change after removing EC or altering other excluded metadata.
 
 ## 3. Model and training methods
 
@@ -167,146 +171,7 @@ Checkpoint and report files are not additional embedding datasets:
 | Parquet embedding | `80ae07da11c63a6f80932982898f222c8a22a6c0740387b55bc6e5b3fead8562` |
 | Reaction IDs | `1f0b4bd4e9fceb39d387d5d22a73e379ec7aa91ee14d8d52b0c5cdc66850a343` |
 
-## 5. Code usage guide
-
-Run the examples from the project root:
-
-```powershell
-cd D:\Codex\2026-07-21
-```
-
-Install the project dependencies if required:
-
-```powershell
-python -m pip install -r requirements.txt
-```
-
-### 5.1 Read the Parquet export
-
-```python
-import pandas as pd
-
-path = "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.parquet"
-embeddings = pd.read_parquet(path)
-
-print(embeddings.shape)       # (18072, 2)
-print(embeddings.columns)     # reaction_id, embedding
-print(embeddings.head(3))
-print(len(embeddings.iloc[0]["embedding"]))  # 256
-```
-
-Use Parquet when reaction IDs and vectors should remain in one table.
-
-### 5.2 Load the NPY matrix and row-ID mapping
-
-```python
-import numpy as np
-import pandas as pd
-
-matrix = np.load(
-    "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.npy",
-    allow_pickle=False,
-)
-ids = pd.read_csv(
-    "artifacts/embeddings/reaction_ids_v2_full_ecaux0.tsv",
-    sep="\t",
-)
-
-assert matrix.shape == (18072, 256)
-assert len(ids) == matrix.shape[0]
-assert ids["row_index"].to_numpy().tolist() == list(range(len(ids)))
-```
-
-Use NPY plus TSV when passing a dense matrix directly to a numerical or machine-learning library. Never use the matrix without preserving the ID table.
-
-### 5.3 Retrieve one reaction embedding by Rhea ID
-
-With Parquet:
-
-```python
-reaction_id = "RHEA:10000"
-row = embeddings.loc[embeddings["reaction_id"] == reaction_id]
-
-if row.empty:
-    raise KeyError(f"Embedding not found: {reaction_id}")
-
-vector = np.asarray(row.iloc[0]["embedding"], dtype=np.float32)
-print(vector.shape)  # (256,)
-```
-
-With NPY plus TSV:
-
-```python
-id_to_row = dict(zip(ids["reaction_id"], ids["row_index"]))
-vector = matrix[id_to_row["RHEA:10000"]]
-```
-
-Replace `RHEA:10000` with an ID that exists in the exported ID table.
-
-### 5.4 Attach embeddings to a metabolic-network reaction table
-
-The network table must first contain a high-confidence mapping to canonical Rhea IDs. For example, assume it has columns `network_reaction_id` and `rhea_id`:
-
-```python
-import pandas as pd
-
-network_reactions = pd.read_parquet("path/to/network_reactions.parquet")
-embedding_table = pd.read_parquet(
-    "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.parquet"
-).rename(columns={"reaction_id": "rhea_id"})
-
-network_with_embeddings = network_reactions.merge(
-    embedding_table,
-    on="rhea_id",
-    how="left",
-    validate="many_to_one",
-)
-
-mapping_coverage = network_with_embeddings["embedding"].notna().mean()
-print(f"Embedding mapping coverage: {mapping_coverage:.1%}")
-```
-
-The `many_to_one` validation is intentional: multiple organism- or compartment-specific network reactions may map to the same canonical Rhea reaction and share its chemical embedding. Network-specific direction, compartment, bounds, organism, and condition should remain separate context fields rather than being overwritten by the Rhea embedding.
-
-Do not silently replace unmatched reactions with a shared zero or unknown vector. Retain a missing-embedding mask and report mapping coverage and confidence.
-
-### 5.5 View precomputed nearest neighbors
-
-```python
-neighbors = pd.read_csv(
-    "artifacts/reports/semantic_quality_v2_full_ecaux0/nearest_neighbors_top10.csv"
-)
-
-query_id = "RHEA:10000"
-print(
-    neighbors.loc[neighbors["query_reaction_id"] == query_id]
-    .sort_values("rank")
-    .head(10)
-)
-```
-
-These neighbors are based on cosine similarity. The full-corpus EC columns are descriptive diagnostics, not a reaction-disjoint test result.
-
-### 5.6 Validate the delivered files
-
-```powershell
-python scripts\validate_phase2_v2.py `
-  --export-config configs\export\phase2_v2_full_ecaux0.yaml
-
-python scripts\validate_embedding_quality_report.py `
-  --embedding artifacts\embeddings\reaction_embeddings_v2_full_ecaux0.npy `
-  --report-dir artifacts\reports\semantic_quality_v2_full_ecaux0
-```
-
-### 5.7 Reproduce training and export
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\run_phase2_v2_full.ps1
-```
-
-This command retrains the model and replaces the full-corpus checkpoint, embeddings, and reports. Routine embedding use does not require rerunning it.
-
-## 6. Validation results
+## 5. Validation results
 
 ### Numerical integrity and invariance
 
@@ -354,7 +219,7 @@ The earlier pilot remains the appropriate reaction-disjoint EC evidence: after e
 
 EC agreement describes embedding geometry; it does not establish performance on an organism-specific, pathway, flux, or other downstream biological task.
 
-## 7. Reporting limitations
+## 6. Reporting limitations
 
 1. Full-corpus training used one random seed and a fixed five-epoch schedule.
 2. No validation split was used in the final fit; model and epoch choices were inherited from the pilot.
@@ -364,4 +229,3 @@ EC agreement describes embedding geometry; it does not establish performance on 
 6. Cofactor-role, atom-map, context, reaction-type, and compartment fields remain unpopulated.
 7. No downstream biological task has been used as a final acceptance criterion.
 8. The project directory is not currently a Git repository, so `git_revision` is null in manifests.
-

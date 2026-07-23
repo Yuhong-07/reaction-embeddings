@@ -20,6 +20,42 @@ This file is the single project ledger for code, configuration, experiment, vali
 
 ## 2. Chronological change record
 
+### 2026-07-23 17:25 — Embedding report input clarification and section removal
+
+Purpose:
+
+- Make the report's `Model inputs` section describe the values actually consumed by the current `ReactionCorpus` and `ReactionEncoder` code path.
+- Remove the colleague-ready recommendation statement, code examples, and conclusion/next-step prescription from every maintained copy of the report.
+
+Changed files:
+
+- `docs/embedding_results_summary.md`: replaced the input description with code-level graph, stoichiometry, pooling, direction, and cofactor inputs; explicitly listed values excluded from the encoder; removed the code usage guide; renumbered the remaining sections.
+- Workspace mirrors `work/embedding_project/docs/embedding_results_summary.md` and `outputs/embedding_results_summary.md`: synchronized the same content and also removed the older `Recommended statement for colleagues` and `Conclusion and next step` sections.
+- `agent.md`: recorded the documentation change.
+
+Configuration:
+
+- No model, training, data, checkpoint, or export configuration changed.
+
+Data/checkpoint compatibility:
+
+- All existing data, checkpoints, embeddings, and validation reports remain compatible and unchanged.
+
+Validation:
+
+- Inspected `configs/model/phase2_structure_only.yaml`, `reaction_dataset.py`, `reaction_encoder.py`, `dmpnn.py`, and graph feature construction before rewriting the input section.
+- Confirmed all three report copies are byte-identical after synchronization.
+- Confirmed the removed section headings no longer occur in any maintained report copy.
+- Confirmed the published output-data Release ZIP contains no additional `embedding_results_summary` copy.
+
+Outputs:
+
+- Documentation only; no embedding artifact was regenerated.
+
+Decision and rollback:
+
+- The code is the authority for the documented model inputs. To roll back, revert the documentation commit that records this change.
+
 ### 2026-07-23 17:30 — GitHub Release data publication
 
 Purpose:
