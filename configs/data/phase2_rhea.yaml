@@ -1,0 +1,5 @@
+reaction_parquet: "data/processed/rhea_reactions.parquet"
+graph_cache: "data/interim/rhea_molecule_graphs.pt"
+phase1_manifest: "data/manifests/rhea_release_141_manifest.json"
+phase1_quality_report: "artifacts/reports/data_quality_report.json"
+

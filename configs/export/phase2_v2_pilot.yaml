@@ -1,0 +1,8 @@
+batch_size: 128
+checkpoint_path: "artifacts/checkpoints/phase2_v2_pilot.pt"
+embedding_npy: "artifacts/embeddings/reaction_embeddings_v2_pilot.npy"
+embedding_parquet: "artifacts/embeddings/reaction_embeddings_v2_pilot.parquet"
+reaction_ids_tsv: "artifacts/embeddings/reaction_ids_v2_pilot.tsv"
+quality_report: "artifacts/reports/embedding_quality_report_v2_pilot.json"
+export_manifest: "data/manifests/phase2_v2_pilot_embedding_manifest.json"
+

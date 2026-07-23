@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments and editors
+.venv/
+venv/
+.idea/
+.vscode/
+*.code-workspace
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+
+# Generated datasets and caches
+data/raw/**
+data/interim/**
+data/processed/**
+
+# Generated model artifacts and reports
+artifacts/checkpoints/**
+artifacts/embeddings/**
+artifacts/reports/**
+
+# Local scratch files
+work/
+tmp/
+*.log

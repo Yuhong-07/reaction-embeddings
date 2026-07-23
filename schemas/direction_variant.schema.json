@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Rhea direction-aware reaction variant",
+  "type": "object",
+  "required": [
+    "direction_variant_id", "canonical_reaction_id", "direction",
+    "rhea_directional_ids", "swap_sides", "reversible_symmetrization",
+    "directional_evidence_count", "has_directional_evidence"
+  ],
+  "properties": {
+    "direction_variant_id": {"type": "string"},
+    "canonical_reaction_id": {"type": "string", "pattern": "^RHEA:[0-9]+$"},
+    "direction": {"enum": ["left_to_right", "right_to_left", "reversible"]},
+    "rhea_directional_ids": {"type": "array", "items": {"type": "string"}},
+    "swap_sides": {"type": "boolean"},
+    "reversible_symmetrization": {"type": "boolean"},
+    "directional_evidence_count": {"type": "integer", "minimum": 0},
+    "has_directional_evidence": {"type": "boolean"},
+    "evidence_by_database_json": {"type": "string"},
+    "undefined_evidence_count": {"type": "integer", "minimum": 0}
+  }
+}

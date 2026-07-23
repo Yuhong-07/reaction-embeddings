@@ -1,0 +1,14 @@
+embedding_dim: 256
+molecule_hidden_dim: 256
+molecule_message_passing_steps: 4
+molecule_readout: attention_sum
+dropout: 0.1
+use_cofactor: true
+ec_as_input: false
+main_embedding_inputs:
+  - reactant_structure
+  - product_structure
+  - signed_stoichiometry
+  - reaction_direction
+  - cofactor_role_with_missing_mask
+

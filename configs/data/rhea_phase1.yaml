@@ -1,0 +1,35 @@
+project_version: "1.0.0"
+source:
+  name: Rhea
+  release: 141
+  release_date: "2026-06-10"
+  license: "CC BY 4.0"
+  license_url: "https://www.rhea-db.org/help/license-disclaimer"
+  download_page: "https://www.rhea-db.org/help/download"
+  rxn_url: "https://ftp.expasy.org/databases/rhea/ctfiles/rhea-rxn.tar.gz"
+  tsv_url: "https://ftp.expasy.org/databases/rhea/tsv/rhea-tsv.tar.gz"
+paths:
+  rxn_archive: "data/raw/rhea/rhea-rxn.tar.gz"
+  tsv_archive: "data/raw/rhea/rhea-tsv.tar.gz"
+  processed_parquet: "data/processed/rhea_reactions.parquet"
+  processed_jsonl: "data/processed/rhea_reactions.jsonl"
+  id_map: "data/processed/reaction_id_map.tsv"
+  source_records_parquet: "data/processed/rhea_source_records.parquet"
+  source_records_jsonl: "data/processed/rhea_source_records.jsonl"
+  direction_variants_parquet: "data/processed/rhea_direction_variants.parquet"
+  direction_variants_tsv: "data/processed/rhea_direction_variants.tsv"
+  transformation_log: "data/interim/transformation_log.jsonl"
+  loose_candidates: "data/interim/loose_duplicate_candidates.tsv"
+  report: "artifacts/reports/data_quality_report.json"
+  manifest: "data/manifests/rhea_release_141_manifest.json"
+processing:
+  canonical_smiles: true
+  isomeric_smiles: true
+  preserve_explicit_hydrogens: true
+  aggregate_duplicate_participants: true
+  reduce_stoichiometry_for_keys: true
+  strict_deduplication: true
+  loose_deduplication: false
+  ignored_in_loose_key:
+    - "CHEBI:15377"  # water
+    - "CHEBI:15378"  # proton

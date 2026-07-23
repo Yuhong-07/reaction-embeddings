@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rhea-reaction-embeddings"
+version = "0.3.0"
+description = "Structure-only metabolic reaction embeddings prepared from Rhea"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "numpy>=1.26,<2",
+  "pandas>=2.0",
+  "pyarrow>=15",
+  "PyYAML>=6",
+  "rdkit>=2022.9",
+  "torch>=2.2",
+]
+
+[project.scripts]
+rhea-prepare = "rhea_embedding.data.prepare_rhea:main"
+
+[project.urls]
+Repository = "https://github.com/Yuhong-07/reaction-embeddings"
+Documentation = "https://github.com/Yuhong-07/reaction-embeddings#readme"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

@@ -1,0 +1,7 @@
+batch_size: 128
+checkpoint_path: "artifacts/checkpoints/phase2_v2_full_ecaux0.pt"
+embedding_npy: "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.npy"
+embedding_parquet: "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.parquet"
+reaction_ids_tsv: "artifacts/embeddings/reaction_ids_v2_full_ecaux0.tsv"
+quality_report: "artifacts/reports/embedding_quality_report_v2_full_ecaux0.json"
+export_manifest: "data/manifests/phase2_v2_full_ecaux0_embedding_manifest.json"

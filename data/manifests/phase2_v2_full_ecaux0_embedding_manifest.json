@@ -1,0 +1,91 @@
+{
+  "checkpoint": {
+    "path": "artifacts/checkpoints/phase2_v2_full_ecaux0.pt",
+    "sha256": "6216d9d86a0fb75d8a3335482a50a6ea5409446687d2e34d9428148a09c093b2"
+  },
+  "config": {
+    "export": {
+      "batch_size": 128,
+      "checkpoint_path": "artifacts/checkpoints/phase2_v2_full_ecaux0.pt",
+      "embedding_npy": "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.npy",
+      "embedding_parquet": "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.parquet",
+      "export_manifest": "data/manifests/phase2_v2_full_ecaux0_embedding_manifest.json",
+      "quality_report": "artifacts/reports/embedding_quality_report_v2_full_ecaux0.json",
+      "reaction_ids_tsv": "artifacts/embeddings/reaction_ids_v2_full_ecaux0.tsv"
+    },
+    "model": {
+      "dropout": 0.1,
+      "ec_as_input": false,
+      "embedding_dim": 256,
+      "main_embedding_inputs": [
+        "reactant_structure",
+        "product_structure",
+        "signed_stoichiometry",
+        "reaction_direction",
+        "cofactor_role_with_missing_mask"
+      ],
+      "molecule_hidden_dim": 256,
+      "molecule_message_passing_steps": 4,
+      "molecule_readout": "attention_sum",
+      "use_cofactor": true
+    },
+    "train": {
+      "batch_size": 64,
+      "checkpoint_metadata_path": "artifacts/checkpoints/phase2_v2_full_ecaux0.metadata.json",
+      "checkpoint_path": "artifacts/checkpoints/phase2_v2_full_ecaux0.pt",
+      "checkpoint_selection": "final_epoch_no_validation_model_selection",
+      "device": "cpu",
+      "epochs": 5,
+      "gradient_clip_norm": 5.0,
+      "learning_rate": 0.0003,
+      "loss_sign_convention": "all configured terms are non-negative penalties and are added",
+      "loss_weights": {
+        "contrastive": 1.0,
+        "covariance": 0.04,
+        "ec_auxiliary": 0.0,
+        "variance": 1.0
+      },
+      "max_training_reactions": 18072,
+      "seed": 42,
+      "temperature": 0.1,
+      "torch_threads": 8,
+      "training_history_path": "artifacts/reports/phase2_v2_full_training_history_ecaux0.jsonl",
+      "training_scope": "full_corpus_v2_structure_only_ecaux0_fixed_5_epochs",
+      "validation_fraction": 0.0,
+      "weight_decay": 1e-05
+    }
+  },
+  "data": {
+    "path": "data/processed/rhea_reactions.parquet",
+    "phase1_manifest": "data/manifests/rhea_release_141_manifest.json",
+    "phase1_manifest_sha256": "9e9c446e775f462bd95577f0c54b4591b1b09c94332dc5fab45e54593887d4e4",
+    "sha256": "7c4b2efe4ce05e3d0599564dc89ce8acb75e67c5864a3b08bbfe6eb67b9de8f4"
+  },
+  "generated_at_utc": "2026-07-23T13:43:40.066274+00:00",
+  "git_revision": null,
+  "manifest_version": 1,
+  "outputs": [
+    {
+      "path": "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.npy",
+      "sha256": "d53db0ca8ca97c43c5a0aad4da7d0a93b0baf8d7d814bdb46b076d21ddf09e35"
+    },
+    {
+      "path": "artifacts/embeddings/reaction_embeddings_v2_full_ecaux0.parquet",
+      "sha256": "80ae07da11c63a6f80932982898f222c8a22a6c0740387b55bc6e5b3fead8562"
+    },
+    {
+      "path": "artifacts/embeddings/reaction_ids_v2_full_ecaux0.tsv",
+      "sha256": "1f0b4bd4e9fceb39d387d5d22a73e379ec7aa91ee14d8d52b0c5cdc66850a343"
+    },
+    {
+      "path": "artifacts/reports/embedding_quality_report_v2_full_ecaux0.json",
+      "sha256": "460cd6ae684748653e63b41c597f5e1d1bd668709310fe4108b0012439fdd93b"
+    }
+  ],
+  "random_seed": 42,
+  "software": {
+    "python": "3.11.7",
+    "rdkit": "2025.09.6",
+    "torch": "2.9.1+cpu"
+  }
+}

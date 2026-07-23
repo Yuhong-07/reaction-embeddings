@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Metabolic reaction embedding input record",
+  "type": "object",
+  "required": [
+    "reaction_id", "canonical_reaction_id", "source_ids", "participants",
+    "reaction_smiles", "direction", "missing_masks", "provenance"
+  ],
+  "properties": {
+    "reaction_id": {"type": "string", "pattern": "^RHEA:[0-9]+$"},
+    "canonical_reaction_id": {"type": "string", "pattern": "^RHEA:[0-9]+$"},
+    "source_ids": {
+      "type": "object",
+      "required": ["rhea", "metanetx", "modelseed", "bigg"],
+      "properties": {
+        "rhea": {"type": "array", "items": {"type": "string"}},
+        "metanetx": {"type": "array", "items": {"type": "string"}},
+        "modelseed": {"type": "array", "items": {"type": "string"}},
+        "bigg": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "participants": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["compound_id", "canonical_smiles", "coefficient", "side", "cofactor_missing"],
+        "properties": {
+          "compound_id": {"type": "string"},
+          "original_smiles": {"type": ["string", "null"]},
+          "canonical_smiles": {"type": ["string", "null"]},
+          "smiles_sanitization_status": {"enum": ["sanitized", "unsanitized", "failed"]},
+          "smiles_missing": {"type": "boolean"},
+          "mapped_smiles": {"type": ["string", "null"]},
+          "original_coefficient": {"type": "number"},
+          "coefficient": {"type": "number"},
+          "side": {"enum": ["reactant", "product"]},
+          "compartment": {"type": ["string", "null"]},
+          "role": {"type": ["string", "null"]},
+          "cofactor_role": {"type": ["string", "null"]},
+          "cofactor_missing": {"type": "boolean"},
+          "compartment_missing": {"type": "boolean"},
+          "role_missing": {"type": "boolean"}
+        }
+      }
+    },
+    "direction": {"enum": ["left_to_right", "right_to_left", "reversible", "undefined"]},
+    "supported_directions": {
+      "type": "array",
+      "items": {"enum": ["left_to_right", "right_to_left", "reversible"]},
+      "uniqueItems": true
+    },
+    "direction_missing": {"type": "boolean"},
+    "direction_evidence_summary_json": {"type": "string"},
+    "reaction_type": {"type": ["string", "null"]},
+    "ec_numbers": {"type": ["array", "null"], "items": {"type": "string"}, "uniqueItems": true},
+    "is_balanced": {"type": ["boolean", "null"]},
+    "balance_check_status": {"enum": ["balanced", "imbalanced", "unknown"]},
+    "atom_mapped_reaction_smiles": {"type": ["string", "null"]},
+    "context": {"type": ["object", "null"]},
+    "missing_masks": {"type": "object"},
+    "provenance": {"type": "array"}
+  }
+}

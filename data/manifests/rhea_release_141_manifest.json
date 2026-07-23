@@ -1,0 +1,84 @@
+{
+  "deduplication_policy": {
+    "loose": "report only; never auto-merged",
+    "strict": "auto-merge exact compound ID + reduced signed stoichiometry + compartment + direction"
+  },
+  "generated_at_utc": "2026-07-21T12:59:07.197255+00:00",
+  "inputs": [
+    {
+      "path": "data/raw/rhea/rhea-rxn.tar.gz",
+      "sha256": "83bd8dde34031e91d2793ad23f5ee0658f9ad819921e3580bbeba03e37dec7f8",
+      "size_bytes": 22957439,
+      "url": "https://ftp.expasy.org/databases/rhea/ctfiles/rhea-rxn.tar.gz"
+    },
+    {
+      "path": "data/raw/rhea/rhea-tsv.tar.gz",
+      "sha256": "409107649151d43289a16e99372154254670e8783034d21e5137e79e9a6aa59c",
+      "size_bytes": 4321852,
+      "url": "https://ftp.expasy.org/databases/rhea/tsv/rhea-tsv.tar.gz"
+    }
+  ],
+  "manifest_version": 1,
+  "outputs": [
+    {
+      "path": "data/interim/loose_duplicate_candidates.tsv",
+      "sha256": "6d909241793051afc93e5d3193664dd9b1710d3d87eae6e3c884752b29c35f91"
+    },
+    {
+      "path": "data/interim/transformation_log.jsonl",
+      "sha256": "766df0f1d52b260632c3405c9d4333e4f341026c1f535c82977b001936ae74c7"
+    },
+    {
+      "path": "data/processed/reaction_id_map.tsv",
+      "sha256": "474ffd8f917b2f11919a3a8a2eed2d73159096e893cbd6ec7522e3a2392d160c"
+    },
+    {
+      "path": "data/processed/rhea_direction_variants.parquet",
+      "sha256": "0d1f4328917fdd9d65ec9334eda3c7da46be04fad4b903a698bd8cba7e3e0f28"
+    },
+    {
+      "path": "data/processed/rhea_direction_variants.tsv",
+      "sha256": "7b77bb278e1539a18e25de5a4c2f3e50386fc76d2c4fba232cced59c57562372"
+    },
+    {
+      "path": "data/processed/rhea_reactions.jsonl",
+      "sha256": "16ce0aca08d891f9b09e3b13f00ad8190aa249dc8ccfdbf5cb43e62aff4faba5"
+    },
+    {
+      "path": "data/processed/rhea_reactions.parquet",
+      "sha256": "7c4b2efe4ce05e3d0599564dc89ce8acb75e67c5864a3b08bbfe6eb67b9de8f4"
+    },
+    {
+      "path": "data/processed/rhea_source_records.jsonl",
+      "sha256": "8cd990a98958da20dec3a5edd7a416fb9aca0d1000b9c62da0ed295dee8457d4"
+    },
+    {
+      "path": "data/processed/rhea_source_records.parquet",
+      "sha256": "e7d4fd64a456f4cc01db038acb73b4708d553bcb07266085592482872eb519b8"
+    },
+    {
+      "path": "artifacts/reports/data_quality_report.json",
+      "sha256": "75600c6f9b61540165b568132cb4f47190e63109b5ed441df73e816f5b1b9516"
+    }
+  ],
+  "pipeline": {
+    "git_revision": null,
+    "name": "rhea_phase1_prepare",
+    "version": "1.0.0"
+  },
+  "record_count": 18072,
+  "software": {
+    "python": "3.11.7",
+    "rdkit": "2025.09.6"
+  },
+  "source": {
+    "download_page": "https://www.rhea-db.org/help/download",
+    "license": "CC BY 4.0",
+    "license_url": "https://www.rhea-db.org/help/license-disclaimer",
+    "name": "Rhea",
+    "release": 141,
+    "release_date": "2026-06-10",
+    "rxn_url": "https://ftp.expasy.org/databases/rhea/ctfiles/rhea-rxn.tar.gz",
+    "tsv_url": "https://ftp.expasy.org/databases/rhea/tsv/rhea-tsv.tar.gz"
+  }
+}
