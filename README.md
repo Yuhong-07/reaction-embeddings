@@ -62,6 +62,8 @@ The [v0.3.0 GitHub Release](https://github.com/Yuhong-07/reaction-embeddings/rel
 
 Download `SHA256SUMS.txt` from the same release and verify the archives before use. The rebuildable `data/interim/` molecular-graph cache is intentionally excluded.
 
+## Model detail 
+See the [Embedding results summary](docs/embedding_results_summary.md) for the detail of the model and the validation results.
 ## Requirements
 
 - Python 3.11 or newer
@@ -167,7 +169,6 @@ The current test suite contains 17 passing tests. The recommended full-corpus ex
 - Random seeds and frozen split indices are saved with checkpoints.
 - The pilot EC evaluation excludes training and model-selection reactions from both queries and candidates. Full-corpus EC metrics are explicitly labelled transductive because every reaction structure was used for self-supervised training.
 
-See the [English embedding results summary](docs/embedding_results_summary.md), [data decisions](docs/data_decisions.md), [Phase 2 notes](docs/phase2_pilot.md), and the [project requirements](AGENTS.embedding.md) for additional context.
 
 ## Contributing
 
