@@ -20,6 +20,45 @@ This file is the single project ledger for code, configuration, experiment, vali
 
 ## 2. Chronological change record
 
+### 2026-07-23 17:30 — GitHub Release data publication
+
+Purpose:
+
+- Publish the immutable Rhea source archives and generated project outputs as downloadable ZIP assets without adding large binary files to Git history.
+
+Changed files:
+
+- `README.md`: added the v0.3.0 release download guide and archive contents.
+- `agent.md`: recorded release contents, exclusions, sizes, and checksums.
+
+Release:
+
+- Tag: `v0.3.0`.
+- Repository: `https://github.com/Yuhong-07/reaction-embeddings`.
+- `rhea-release-141-raw-data.zip`: 24.91 MB; contains `data/raw/`.
+- `reaction-embeddings-v0.3.0-output-data.zip`: 211.62 MB; contains `data/processed/`, `artifacts/checkpoints/`, `artifacts/embeddings/`, and `artifacts/reports/`.
+- `SHA256SUMS.txt`: checksum sidecar for both archives.
+
+Checksums:
+
+- Raw data ZIP: `7784781BB27CCAB07192EA51952A78866E8A18F2B2EBD1AAD2EA443B9FD4C066`.
+- Output data ZIP: `9C75B0301F92694C336DCA36767D106393337945D4911E923361957A03D4ADD8`.
+
+Data/checkpoint compatibility:
+
+- Archive creation did not modify any source dataset, processed table, model checkpoint, embedding, or report.
+- `data/interim/` is excluded because it is a rebuildable molecular-graph cache rather than source or final output data.
+
+Validation:
+
+- Listed both ZIP archives successfully after creation and confirmed their expected top-level paths.
+- Generated SHA-256 hashes for both assets.
+
+Decision and rollback:
+
+- GitHub Release assets are the canonical downloadable binary distribution for v0.3.0; the Git repository remains source-only.
+- To roll back publication, delete the v0.3.0 Release assets; local files and Git history remain usable.
+
 ### 2026-07-23 17:00 — GitHub repository publication
 
 Purpose:

@@ -53,6 +53,15 @@ The current corpus contains **18,072 strictly deduplicated reactions from Rhea r
 
 Generated data and model artifacts remain in the local layout above but are excluded from normal Git commits by `.gitignore`. Publish large deliverables with a release asset, object storage, or Git LFS rather than ordinary Git blobs.
 
+## Download data and generated outputs
+
+The [v0.3.0 GitHub Release](https://github.com/Yuhong-07/reaction-embeddings/releases/tag/v0.3.0) provides two versioned archives:
+
+- `rhea-release-141-raw-data.zip`: the immutable Rhea release 141 source archives under `data/raw/`.
+- `reaction-embeddings-v0.3.0-output-data.zip`: processed reaction tables plus checkpoints, embedding exports, and validation reports under `data/processed/` and `artifacts/`.
+
+Download `SHA256SUMS.txt` from the same release and verify the archives before use. The rebuildable `data/interim/` molecular-graph cache is intentionally excluded.
+
 ## Requirements
 
 - Python 3.11 or newer
