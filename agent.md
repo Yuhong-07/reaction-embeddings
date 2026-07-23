@@ -36,6 +36,8 @@ Release:
 
 - Tag: `v0.3.0`.
 - Repository: `https://github.com/Yuhong-07/reaction-embeddings`.
+- Published release: `https://github.com/Yuhong-07/reaction-embeddings/releases/tag/v0.3.0`.
+- Published from commit: `ce53e02e1bfddde10c744fe47840fd679d9f315f`.
 - `rhea-release-141-raw-data.zip`: 24.91 MB; contains `data/raw/`.
 - `reaction-embeddings-v0.3.0-output-data.zip`: 211.62 MB; contains `data/processed/`, `artifacts/checkpoints/`, `artifacts/embeddings/`, and `artifacts/reports/`.
 - `SHA256SUMS.txt`: checksum sidecar for both archives.
@@ -54,6 +56,8 @@ Validation:
 
 - Listed both ZIP archives successfully after creation and confirmed their expected top-level paths.
 - Generated SHA-256 hashes for both assets.
+- Published the GitHub Release and verified that all three requested assets have independent download links.
+- GitHub reports the uploaded ZIP digests as the same SHA-256 values recorded above.
 
 Decision and rollback:
 
