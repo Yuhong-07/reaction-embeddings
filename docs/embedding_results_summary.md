@@ -15,10 +15,6 @@ The final matrix has shape `[18,072, 256]`, contains no NaN or infinite values, 
 
 This export is the recommended chemical-reaction representation for subsequent network integration. It is not yet a condition-specific, organism-specific, compartment-aware, or flux-aware representation.
 
-## Recommended statement for colleagues
-
-> We trained a structure-only reaction encoder on all 18,072 strictly deduplicated Rhea release 141 reactions and generated a 256-dimensional embedding for every reaction. The model uses molecular graphs, signed stoichiometry, participant side, and evidence-derived direction; EC numbers were not used as inputs or training targets. The full export contains no NaN/Inf values, has no unexplained exact embedding collisions, reaches an effective rank of 149.57, and passes reproducibility, invariance, and anti-collapse checks. EC nearest-neighbor consistency remains above random expectation, but the full-corpus EC analysis is transductive and downstream biological validation has not yet been performed.
-
 ## 1. Data
 
 ### Source and preparation
@@ -369,8 +365,3 @@ EC agreement describes embedding geometry; it does not establish performance on 
 7. No downstream biological task has been used as a final acceptance criterion.
 8. The project directory is not currently a Git repository, so `git_revision` is null in manifests.
 
-## 8. Conclusion and next step
-
-The full-corpus output is now the recommended standalone chemical-reaction embedding for all 18,072 reactions. It is suitable for reaction similarity analysis and as an initial reaction-node feature in a metabolic-network model.
-
-The next modeling step should keep this chemical embedding separate from organism- and condition-specific context. Map model reactions to Rhea IDs, attach the full embedding to reaction nodes, and learn a separate network/context encoder using compartment, stoichiometric topology, direction/bounds, organism, and condition information. Multiple-seed replication and downstream network validation remain recommended before external performance claims.
