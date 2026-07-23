@@ -31,4 +31,5 @@ artifacts/reports/**
 # Local scratch files
 work/
 tmp/
+release_assets/
 *.log

@@ -29,6 +29,7 @@ Purpose:
 Changed files:
 
 - `README.md`: added the v0.3.0 release download guide and archive contents.
+- `.gitignore`: excluded the local `release_assets/` staging directory from normal Git commits.
 - `agent.md`: recorded release contents, exclusions, sizes, and checksums.
 
 Release:
